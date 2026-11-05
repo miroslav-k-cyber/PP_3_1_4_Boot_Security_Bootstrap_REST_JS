@@ -6,9 +6,10 @@ import lombok.Setter;
 
 import java.util.List;
 
-@Getter
-@Setter
-@NoArgsConstructor
+@Getter  //@Getter — создает геттеры (нужны для Jackson, чтобы сериализовать в JSON).
+@Setter  // - аналогия
+@NoArgsConstructor  // @NoArgsConstructor — пустой конструктор (обязателен для Jackson).
+
 public class UserRequestDto {
     private String firstName;
     private String lastName;

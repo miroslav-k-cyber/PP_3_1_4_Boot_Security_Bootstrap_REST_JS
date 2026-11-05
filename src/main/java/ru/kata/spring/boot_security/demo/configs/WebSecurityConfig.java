@@ -31,19 +31,20 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         // РАЗРЕШАЕМ ВСЕ СТАТИЧЕСКИЕ РЕСУРСЫ (CSS, JS, Webjars, Картинки)
                         .requestMatchers(org.springframework.boot.autoconfigure.security.servlet.PathRequest.toStaticResources().atCommonLocations()).permitAll()
-                        .requestMatchers("/static/static/**", "/css/**", "/webjars/**").permitAll()
+                        .requestMatchers("/static/static/**", "/css/**", "/webjars/**", "/js/**").permitAll()
                         .requestMatchers("/", "/index").permitAll()
                         
                         // Правила для REST-контроллеров бэкенда
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/api/user").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers("/api/user/**", "/api/user").hasAnyRole("USER", "ADMIN")
                         
-                        // Правила для HTML-страниц
-                        .requestMatchers("/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/user").hasAnyRole("USER", "ADMIN")
+                        // Правила для HTML-страниц (ИСПРАВЛЕНО: добавлены адреса без слэшей, чтобы убрать ошибку 403)
+                        .requestMatchers("/admin", "/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/user", "/user/**").hasAnyRole("USER", "ADMIN")
                         
                         .anyRequest().authenticated()
                 )
+                
                 // 3. Форма логина
                 .formLogin(form -> form
                         .usernameParameter("username")
